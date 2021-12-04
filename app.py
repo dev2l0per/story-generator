@@ -11,6 +11,7 @@ API_URL_PARAM = "/infer/gpt2_story"
 @app.route("/gen-story", methods=['POST'])
 def generate_story():
   try:
+    print(request.form)
     text = request.form['text']
     num_samples = request.form['num_samples']
     length = request.form['length']
@@ -45,4 +46,4 @@ def main():
   return render_template("index.html")
 
 if __name__ == "__main__":  
-  app.run(debug=True, host="0.0.0.0", port="1234")
+  app.run(host="0.0.0.0", port="5000")
