@@ -35,15 +35,20 @@
         </form>
         <hr>
         <ul class="list-group result">
+        </ul>
     </div>
     </div>
     <script>
         $('#num_samples').on("input change", (e) => {
             $('#numSamplesValue').text(e.target.value)
-        })
+        });
         $('#length').on("input change", (e) => {
             $('#lengthValue').text(e.target.value)
-        })
+        });
+
+        function setResultToInput(key) {
+            $('textarea[name=text]').val($(`#result_${key}`).text());
+        }
     </script>
     <script>
         $(document).ready(() => {
@@ -57,18 +62,36 @@
                         const result = $(".result");
                         result.empty();
                         for (const key in res) {
-                            const resultItem = document.createElement('li');
-                            resultItem.className = "list-group-item";
-                            resultItem.textContent = res[key];
-                            result.append(resultItem);
+                            const listItem = document.createElement('li');
+                            const rowDiv = document.createElement('div');
+                            const col11 = document.createElement('div');
+                            const col1 = document.createElement('div');
+                            const btn = document.createElement('button');
+
+                            listItem.className = "list-group-item";
+                            rowDiv.className = "row";
+                            col11.className = "col-md-11";
+                            col1.className = "col-md-1";
+                            btn.classList.add("btn", "btn-primary")
+
+                            col11.id = `result_${key}`;
+                            btn.setAttribute("onclick", `setResultToInput(${key});`);
+
+                            col11.textContent = res[key]
+                            btn.textContent = "select";
+
+                            col1.append(btn);
+                            rowDiv.append(col11, col1);
+                            listItem.append(rowDiv);
+                            result.append(listItem);
                         }
                     },
                     error: (xhr, status) => {
                         console.log(status)
                     },
                 });
-            })
-        })
+            });
+        });
     </script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 </body>
