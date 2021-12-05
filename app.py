@@ -28,6 +28,7 @@ def generate(text, num_samples, length):
     
     return result
   except Exception as e:
+    print(e)
     raise Exception("Error")
 
 @app.route("/gen-potter-fanfic", methods=['POST'])
