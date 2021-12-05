@@ -31,7 +31,8 @@
                 <label for="length">이어서 작성될 내용 길이 : <span id="lengthValue">10</span></label>
                 <input type="range" class="form-control" name="length" id="length" min="10" max="300" value="10">
             </div>
-            <input type="button" id="submit" class="btn btn-primary" value="Generate"></button>
+            <input type="button" id="gen-story" class="btn btn-primary submit" value="Generate Ainize Story"></button>
+            <input type="button" id="gen-potter-fanfic" class="btn btn-primary submit" value="Generate Potter Fanfic"></button>
         </form>
         <hr>
         <ul class="list-group result">
@@ -52,9 +53,9 @@
     </script>
     <script>
         $(document).ready(() => {
-            $('#submit').click(() => {
+            $('.submit').click((e) => {
                 $.ajax({
-                    url: "/gen-story",
+                    url: `/${e.target.id}`,
                     type: 'POST',
                     enctype: 'multipart/form-data',
                     data: $('#generator').serialize(),

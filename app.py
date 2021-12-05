@@ -1,12 +1,51 @@
+from transformers import AutoTokenizer, AutoModelWithLMHead, pipeline
+import torch
 import requests
 import json
 from flask import (
   Flask, request, Response, render_template
 )
+
 app = Flask(__name__)
 
-API_URL = "https://feature-add-torch-serve-gpt-2-server-gkswjdzz.endpoint.ainize.ai"
-API_URL_PARAM = "/infer/gpt2_story"
+tokenizer = AutoTokenizer.from_pretrained("ceostroff/harry-potter-gpt2-fanfiction")
+model = AutoModelWithLMHead.from_pretrained("ceostroff/harry-potter-gpt2-fanfiction", pad_token_id=tokenizer.eos_token_id)
+text_generation = pipeline("text-generation", model=model, tokenizer=tokenizer)
+
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+model.to(device)
+
+AINIZE_STORY_GEN_URL = "https://feature-add-torch-serve-gpt-2-server-gkswjdzz.endpoint.ainize.ai"
+AINIZE_STORY_GEN_URL_PARAM = "/infer/gpt2_story"
+
+def generate(text, num_samples, length):
+  try:
+    text = text.strip()
+    result = dict()
+    result_list = text_generation(text, max_length=length, do_sample=True, num_return_sequences = num_samples)
+    for idx, item in enumerate(result_list):
+      result[idx] = item['generated_text']
+    
+    return result
+  except Exception as e:
+    raise Exception("Error")
+
+@app.route("/gen-potter-fanfic", methods=['POST'])
+def generate_porter_fanfiction():
+  try:
+    print(request.form)
+    text = request.form['text']
+    num_samples = request.form['num_samples']
+    length = request.form['length']
+  except Exception:
+    return Response("Empty Field", status=400)
+  
+  try:
+    result = generate(text, int(num_samples), int(length))
+
+    return result
+  except Exception:
+    return Response("API Server Error", status = 500)
 
 @app.route("/gen-story", methods=['POST'])
 def generate_story():
@@ -18,7 +57,7 @@ def generate_story():
   except Exception:
     return Response("Empty Field", status=400)
   
-  url = API_URL + API_URL_PARAM
+  url = AINIZE_STORY_GEN_URL + AINIZE_STORY_GEN_URL_PARAM
   headers = {
     "accept": "*/*",
     "Content-Type": "application/json",
