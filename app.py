@@ -1,4 +1,4 @@
-from transformers import AutoTokenizer, AutoModelWithLMHead, pipeline
+from transformers import AutoTokenizer, AutoModelWithLMHead, pipeline, AutoModelForCausalLM
 import torch
 import requests
 import json
@@ -9,7 +9,7 @@ from flask import (
 app = Flask(__name__)
 
 tokenizer = AutoTokenizer.from_pretrained("ceostroff/harry-potter-gpt2-fanfiction")
-model = AutoModelWithLMHead.from_pretrained("ceostroff/harry-potter-gpt2-fanfiction", pad_token_id=tokenizer.eos_token_id)
+model = AutoModelForCausalLM.from_pretrained("ceostroff/harry-potter-gpt2-fanfiction", pad_token_id=tokenizer.eos_token_id)
 text_generation = pipeline("text-generation", model=model, tokenizer=tokenizer)
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
