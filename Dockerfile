@@ -1,4 +1,5 @@
-FROM pytorch/pytorch:1.9.1-cuda11.1-cudnn8-runtime
+#FROM pytorch/pytorch:1.9.1-cuda11.1-cudnn8-runtime
+FROM python:3.9
 WORKDIR /app
 COPY . .
 RUN pip install --upgrade pip
