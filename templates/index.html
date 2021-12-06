@@ -54,9 +54,6 @@
     <script>
         $(document).ready(() => {
             $('.submit').click((e) => {
-                console.log($('#text').val());
-                console.log($('#num_samples').val());
-                console.log($('#length').val());
                 $.ajax({
                     url: `/${e.target.id}`,
                     type: 'POST',
