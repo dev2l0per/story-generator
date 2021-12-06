@@ -12,7 +12,12 @@ tokenizer = AutoTokenizer.from_pretrained("ceostroff/harry-potter-gpt2-fanfictio
 model = AutoModelForCausalLM.from_pretrained("ceostroff/harry-potter-gpt2-fanfiction", pad_token_id=tokenizer.eos_token_id)
 text_generation = pipeline("text-generation", model=model, tokenizer=tokenizer)
 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+if torch.cuda.is_available():
+  device = torch.device("cuda")
+else:
+  device = torch.device("cpu")
+
+print(device)
 model.to(device)
 
 AINIZE_STORY_GEN_URL = "https://feature-add-torch-serve-gpt-2-server-gkswjdzz.endpoint.ainize.ai"
