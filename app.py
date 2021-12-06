@@ -34,10 +34,10 @@ def generate(text, num_samples, length):
 @app.route("/gen-potter-fanfic", methods=['POST'])
 def generate_porter_fanfiction():
   try:
-    print(request.form)
-    text = request.form['text']
-    num_samples = request.form['num_samples']
-    length = request.form['length']
+    params = request.get_json();
+    text = params['text']
+    num_samples = params['num_samples']
+    length = params['length']
   except Exception:
     return Response("Empty Field", status=400)
   
@@ -51,10 +51,11 @@ def generate_porter_fanfiction():
 @app.route("/gen-story", methods=['POST'])
 def generate_story():
   try:
-    print(request.form)
-    text = request.form['text']
-    num_samples = request.form['num_samples']
-    length = request.form['length']
+    print(request)
+    params = request.get_json()
+    text = params['text']
+    num_samples = params['num_samples']
+    length = params['length']
   except Exception:
     return Response("Empty Field", status=400)
   
@@ -86,4 +87,4 @@ def main():
   return render_template("index.html")
 
 if __name__ == "__main__":  
-  app.run(host="0.0.0.0", port="5000")
+  app.run(debug=True, host="0.0.0.0", port="5000")

@@ -54,11 +54,20 @@
     <script>
         $(document).ready(() => {
             $('.submit').click((e) => {
+                console.log($('#text').val());
+                console.log($('#num_samples').val());
+                console.log($('#length').val());
                 $.ajax({
                     url: `/${e.target.id}`,
                     type: 'POST',
-                    enctype: 'multipart/form-data',
-                    data: $('#generator').serialize(),
+                    enctype: 'application/json',
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({
+                        text: $('#text').val(),
+                        num_samples: $('#num_samples').val(),
+                        length: $('#length').val(),
+                    }),
                     success: (res) => {
                         const result = $(".result");
                         result.empty();
